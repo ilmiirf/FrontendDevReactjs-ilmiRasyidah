@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/homePage";
+import DetailPage from "./pages/detailPage";
+import "./styles/styles.css";
+import { getRestaurantList } from "./utils/api";
+
 
 function App() {
+  const [restaurants, setRestaurants] = useState([]);
+
+  useEffect(() => {
+    getRestaurantList().then((result) => {
+      setRestaurants(result);
+    });
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <main>
+        <Routes>
+          <Route path="/" element={<HomePage restaurants={restaurants} />} />
+          <Route path="Restaurant/:id" element={<DetailPage />} />
+        </Routes>
+      </main>
     </div>
   );
 }
